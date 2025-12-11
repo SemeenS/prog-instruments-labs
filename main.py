@@ -544,4 +544,6 @@ class Level(tool.State):
             self.sun_group.draw(surface)
 
             if self.drag_plant:
+
                 self.drawMouseShow(surface)
+                
