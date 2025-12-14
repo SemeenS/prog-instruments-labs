@@ -32,7 +32,7 @@ class Agent:
         The Agent will receive a GameState (from either {pacman, capture, sonar}.py) and
         must return an action from Directions.{North, South, East, West, Stop}
         """
-        logger.debug(f"Agent {self.index} requesting action for state")
+        logger.debug("Agent %s requesting action for state", self.index)
 
 
 
@@ -61,7 +61,7 @@ class Configuration:
     def __init__(self, pos, direction):
         self.pos = pos
         self.direction = direction
-        logger.debug(f"Configuration created: position={pos}, direction={direction}")
+        logger.debug("Configuration created: position=%s, direction=%s", pos, direction)
 
     def getPosition(self):
         return self.pos
@@ -100,7 +100,7 @@ class Configuration:
             direction = self.direction  # There is no stop direction
 
         new_config = Configuration((x + dx, y + dy), direction)
-        logger.debug(f"Generated successor: {self} -> {new_config}")
+        logger.debug("Generated successor: %s -> %s", self, new_config)
         return new_config
 
 
@@ -116,7 +116,7 @@ class AgentState:
         self.scaredTimer = 0
         self.numCarrying = 0
         self.numReturned = 0
-        logger.info(f"AgentState created: isPacman={isPacman}, start={startConfiguration}")
+        logger.info("AgentState created: isPacman=%s, start=%s", isPacman, startConfiguration)
 
     def __str__(self):
         if self.isPacman:
@@ -170,7 +170,7 @@ class Grid:
         self.height = height
         self.data = [[initialValue for y in range(height)] for x in range(width)]
 
-        logger.info(f"Grid initialized: {width}x{height}, initialValue={initialValue}")
+        logger.info("Grid initialized: %sx%s, initialValue=%s", width, height, initialValue)
 
         if bitRepresentation:
             logger.debug("Unpacking bit representation for grid")
@@ -180,7 +180,7 @@ class Grid:
         return self.data[i]
 
     def __setitem__(self, key, item):
-        logger.debug(f"Grid setting [{key}] = {item}")
+        logger.debug("Grid setting [%s] = %s", key, item)
         self.data[key] = item
 
     def __str__(self):
@@ -223,7 +223,7 @@ class Grid:
 
     def count(self, item=True):
         count = sum([x.count(item) for x in self.data])
-        logger.debug(f"Grid count for '{item}': {count}")
+        logger.debug("Grid count for '%s': %s", item, count)
         return count
 
     def asList(self, key=True):
@@ -232,7 +232,7 @@ class Grid:
             for y in range(self.height):
                 if self[x][y] == key:
                     list.append((x, y))
-        logger.debug(f"Grid asList found {len(list)} items with key={key}")
+        logger.debug("Grid asList found %s items with key=%s", len(list), key)
         return list
 
     def packBits(self):
@@ -291,7 +291,7 @@ def reconstituteGrid(bitRep):
     if type(bitRep) is not type((1, 2)):
         return bitRep
     width, height = bitRep[:2]
-    logger.info(f"Reconstituting grid from bits: {width}x{height}")
+    logger.info("Reconstituting grid from bits: %sx%s", width, height)
     return Grid(width, height, bitRepresentation=bitRep[2:])
 
 
@@ -348,7 +348,7 @@ class Actions:
     def directionToVector(direction, speed=1.0):
         dx, dy = Actions._directions[direction]
         vector = (dx * speed, dy * speed)
-        logger.debug(f"Converted direction {direction} to vector {vector}")
+        logger.debug("Converted direction %s to vector %s", direction, vector)
         return vector
 
     directionToVector = staticmethod(directionToVector)
@@ -361,7 +361,7 @@ class Actions:
         # In between grid points, all agents must continue straight
         if abs(x - x_int) + abs(y - y_int) > Actions.TOLERANCE:
             current_dir = config.getDirection()
-            logger.debug(f"Agent between points, forced direction: {current_dir}")
+            logger.debug("Agent between points, forced direction: %s", current_dir)
             return [current_dir]
 
         for dir, vec in Actions._directionsAsList:
@@ -371,7 +371,7 @@ class Actions:
             if not walls[next_x][next_y]:
                 possible.append(dir)
 
-        logger.debug(f"Possible actions from {config.pos}: {possible}")
+        logger.debug("Possible actions from %s: %s", config.pos, possible)
         return possible
 
     getPossibleActions = staticmethod(getPossibleActions)
